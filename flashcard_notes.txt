@@ -1,0 +1,49 @@
+- The Central Dogma (of Biology):
+	- DNA (genetic code) --> Transcription (converted) --> mRNA --> Proteins (amino acids)
+	- DNA {A, C, G, T}, A<->C, G<->T 
+	- RNA {A, C, G, U}, A<->C, G<->U
+	- 3-->5 , 5-->3
+	- THREE nucleotides code for ONE amino acid
+	- Coding strand <--> (RNA<-->) Template strand, RNA read from the template strand, same as Coding strand (except T => U)
+
+- Human genome: 3.1 billion base pairs, 3.1 Gbp
+- Bacteria genome: 2 million base pairs, 2 Mbp
+
+- FASTA:
+	- Name of both a file format AND a search heuristic (slower than BLAST, but better at finding distant related sequences)
+	- file format extension: .fasta and .faa, the first is for both nucleotides or amino acids, the latter strictly for amino acids
+- BLAST:
+	- Heuristics search algo: Count only consecutive matches (cause prob. more important), reduces number of changes compared to the same number of matches but scattered. 
+	- Different algorithms:
+		-> seed + extend: index k-mers in query sequence -> search for similar k-mers in DB, if few matches prob. no very good match, if many prob. better -> then check adjacent sequence in between matching k-mers
+
+	- k-mers: sequence of consecutive matches, length k
+	- Case: Query sequence, we don't know if will fined the entire length as a whole
+	- Protein domains: highly conserved region, rest of the protein could be very different when compering amino acid sequences
+		- Dehydrogenase: H + OH = H20
+	- PAM #: # number of mutations per 100 amino acid, e.g. 250 mean 250 mutations per 100, or 2.5 per amino acid (its not on DNA level, but amino acid level) so an amino acid could have changed multiple times L->K->R for instance
+	- Blosum:# # percent identity of proteins used, e.g. Blosum 62 (most used, standard in BLAST)
+	- Scoring matrix: Higher score for match mean there are less options of similar amino acid to be substituted in
+	- Rule in DB search: extend the as long the score is above 0
+
+	- Raw score (when aligning): match/mismatch score + gap penalty (opening and per gap)
+	- y-axis: numb. of alignments, x-axis: (raw)score, percentage of alignments with a given score or better, the probability of the alignment being significant
+	- bit score (normalize the score): s' = [lambda*S - ln(k)]/ln(2); lambda and k depend on scoring matrix and gap penalties used, make it possible to compare scores between scoring-systems like PAM and Blosum
+	- normalize score based on length and query(n) and length of the database(m): E = k*m*n*e^(-lambda*S), expectation value
+		- length of query and database effect the expectation, the longer database the more likely to find similarities by chance
+		- E values: <1e-100 indicates identical proteins, 
+				<1e-5,1e-50> homologues proteins,
+				>1e-1 maybe random.
+	
+	- DNA evolves a lot faster than proteins, so different DNA sequences can be the same protein sequence
+	- tblastx: DNA query and DNB database, but in protein space
+
+	- Position Specific Weight Matrix(PSWM, or Position weight matrix PWM): for a selection of multiple different sequences of some given length, find the relative occurrence of amino acids (letters) for each position (maximum 1), then for a query sequence (same length) constructed from one of the possible letters at each position and ADD the corresponding relative value before dividing by the sequence length. For many sequences you could find an average value, and then compare that to the value of a given sequence
+	- psi BLAST: 
+		
+
+
+
+
+
+
