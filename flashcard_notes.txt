@@ -1,4 +1,4 @@
-- The Central Dogma (of Biology):
+- The Central Dogma (of Biology): DONE
 	- DNA (genetic code) --> Transcription (converted) --> mRNA --> Proteins (amino acids)
 	- DNA {A, C, G, T}, A<->C, G<->T 
 	- RNA {A, C, G, U}, A<->C, G<->U
@@ -39,11 +39,106 @@
 	- tblastx: DNA query and DNB database, but in protein space
 
 	- Position Specific Weight Matrix(PSWM, or Position weight matrix PWM): for a selection of multiple different sequences of some given length, find the relative occurrence of amino acids (letters) for each position (maximum 1), then for a query sequence (same length) constructed from one of the possible letters at each position and ADD the corresponding relative value before dividing by the sequence length. For many sequences you could find an average value, and then compare that to the value of a given sequence
-	- psi BLAST: 
+	- psi BLAST:
+
+
+----------------------------------------------------------------------
+
+Week 9 (chapter 3):
+- Reads --> Contigs --> Scaffolds --> Chromosomes
+- Reads: Raw, shorter continous seqs. from the sequensers
+- 
+- Combination of long and short reads
+
+- Sequencing by breaking genome into predefined pieces that are read before stitching it all together were considered to slow, instead --> make many copies of the genome, split randomly into small pieces that are read, try to reconstruct through computational techniques
+- Coverage (sequence depth of coverage): refer to how many times a region of the genome has been read 
+- Consensus: ???
+Scaffolds: Contigs put together???
+- De Bruijn graph: from looking at reads as nodes (e.g. -(AAG)- or -(CTC)-), the nodes are instead the edges (e.g. -(AA)-(AG)- or -(CT)-(TC)-)
+- Hamiltonian path approach Overlap-layout-consensus (OLC): the reads are the nodes, conect with edges
+- de Bruijn graph: the end of the reads (of a given number of base pairs overlap) are the nodes, and the edges the are the reads
+	- benefit: can merge identical nodes into one
+
+----------------------------------------------------------------------
+
+Week 10 Clustering:
+- Clustering: Groupe objects that are similar (in some sense)
+	- A method of classification (unsupervised ML)
+
+- A (good) clustering principle: The distance between a pair of members in a group should be smaller then the distance between members of different groups
+
+- Example of data than can be clustered:
+	- Gene expression levels in various samples (multi-dimensional values)
+	- Sequences (alignment distance)
+
+- Common approaches: Centroid based and Hierarchical
+
+	- Centroid based:
+		- Define centroids (mass centres)
+		- Calculate distance to centroid
+		- Use various definitions of distance
+		- k-means: 
+			- k numbers of clusters
+			- Lloyd's K-means algorithm:
+				1. Initially choose k random datapoints as centres
+				2. Assign each point to its nearest centre
+				3. Calculate the centroid (mass centre) of each cluster
+				4. Assign the points to its nearest centre of the new centres
+				5. Repeat 3. and 4. until some threshold is met, e.g. distance of centroid displacement
 		
+		- Soft or fussy clustering: Each cluster is assign a colour, for instance red and blue, and the points given a value of each as a softmax vector, e.g. point1 (red: 0.80, blue: 0.20), point2 (0.98, 0.02), instead of a hard assignment
 
+	- Hierarchical:
+		- Uses distance between points
+		- Types:
+			- Agglomerative: 
+				1. Every point start as their own cluster
+				2. Then merges with the nearest cluster (point at this point) to create new cluster
+				3. Continue until some specified number of clusters are met, or all points are within same cluster
 
+			- Divisive: 
+				1. All points is within the same cluster root/supercluster
+				2. Then for each point calculate the distance to every other point and find average distance
+				3. The point with the highest average distance become the starting point of a new cluster
+				4. Then for each point check average distance to members in the old cluster vs the new
+				5. Based on average distance, assign points to cluster
+				6. For next iteration split the cluster with the furthest away member
+				7. Meaning if we want 10 clusters we need to do 9 iterations of the algorithm
 
+- Linkage criteria: How to compare distance between to clusters A and B:
+	- Single linkage: Smallest distance between any point in A to any point in B
+	- Average linkage: Between any point in A to any point in B (UPGMA)
+	- Maximum linkage: Largest distance between any point in A to any point in B
 
+	- Keep distance matrix updated as clusters are formed
+	- UPGMA also used in phylogenetic tree reconstruction
 
+- Distance metrics:
+	- Euclidean
+	- Manhattan
+	- Maximum distance
 
+	For sequences:
+		- Total number of differences (mutations + indels)
+		- Fraction (or percentage) of different residues
+
+- Sequence clustering:
+	- Greedy heuristic centroid-based clustering approach:
+
+		- UCLUST algorithm:
+			- Clusters defined minimum sequence similarity (e.g. 97%) with centroid representative sequence
+			1. Sort by abundance (number of copies or identical sequences)
+			2. Choose first sequence as centroid for the first cluster
+			3. Process the remaining sequences in order:
+				3.1. Sequences with given similarity to any centroid sequence become member
+				3.2. If no centroid similar enough, the sequence forms the centroid of a new cluster
+
+		- DNAclust:
+
+		- CD-HIT:
+
+	- Hierarchical:
+
+		- mothur(min, max, average)
+
+		- Swarm(single linkage with break rule)
